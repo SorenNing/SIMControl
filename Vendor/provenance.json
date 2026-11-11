@@ -1,0 +1,21 @@
+{
+  "CCSIMTool": {
+    "source": "ControlCenter18 3.0-beta4 original CCSIM tool; developed by Netskao",
+    "size": 70176,
+    "sha256": "b9ef962cd0e75374c5499f955d57595ca8367b5ecb8d8c0c2d067a0849e218a9",
+    "cpu": "arm64",
+    "recompiled": false
+  },
+  "original_module": "netskao.ccsim",
+  "original_module_binary_included": false,
+  "resources": [
+    {
+      "file": "CCSIM@3x.png",
+      "sha256": "097dd959719755c747f1474a790b44358bfb0d88b7eb70b9245573a15066ab53"
+    },
+    {
+      "file": "SettingsIcon@3x.png",
+      "sha256": "fb98b7f82820e6e05fb3063774577b6834bad20df62e6a507b60be9da26af039"
+    }
+  ]
+}

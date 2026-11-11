@@ -1,0 +1,7 @@
+/build/
+/dist/
+/local-checks/
+/local-check-progress.log
+__pycache__/
+*.py[cod]
+.DS_Store

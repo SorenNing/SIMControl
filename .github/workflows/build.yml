@@ -1,0 +1,21 @@
+name: Build standalone SIMControl
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Xcode toolchain
+        run: xcodebuild -version
+      - name: Build and verify standalone module
+        run: bash tools/build-macos.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: SIMControl-1.0
+          path: |
+            dist/*.deb
+            dist/package-validation.json
+          if-no-files-found: error
