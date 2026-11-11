@@ -17,11 +17,21 @@
 - 系统控制中心模块机制
 - 越狱环境中的原始 `CCSIMTool`
 
+## 图标
+
+采用 Ning 设计的 A「原生绿」蜂窝天线图标，三处使用同一套图形：
+
+- 控制中心按钮及展开卡片：透明底白色 `CCSIM`，50/100/150 px。
+- 设置 → 控制中心列表：绿色圆角 `SettingsIcon`，29/58/87 px。
+- Sileo：绿色圆角包图标，512/256/128 px，安装到 `usr/share/icons/`；`control` 的 `Icon` 指向 512 px 图标。
+
+资源由 `tools/simcontrol.py` 中的 SHA256 清单和安装路径统一约束。
+
 ## 构建
 
 仓库只提供源码和手动触发的 GitHub Actions 工作流。工作流采用 macOS 的 iPhoneOS SDK 构建 arm64/arm64e，并生成独立 deb。
 
-本次源码同步不包含构建产物，也未触发构建。
+本次仅同步 A「原生绿」图标资源和 Ning 作者信息，未构建或分发安装包。
 
 ## 目录
 

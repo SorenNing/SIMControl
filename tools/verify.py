@@ -2,7 +2,7 @@
 """Verify the standalone deb without running its payload."""
 import gzip,io,json,plistlib,struct,sys,tarfile
 from pathlib import Path
-from simcontrol import ROOT,DEB,BUNDLE,HELPER,PROVENANCE,HELPER_SHA256,RESOURCE_HASHES,require,sha256,macho,module_plist,control_fields
+from simcontrol import ROOT,DEB,BUNDLE,HELPER,PROVENANCE,HELPER_SHA256,RESOURCE_HASHES,RESOURCE_PATHS,require,sha256,macho,module_plist,control_fields
 
 def main():
     path=Path(sys.argv[1]) if len(sys.argv)>1 else DEB
@@ -31,14 +31,14 @@ def main():
                     require(rel=='control','unexpected maintainer script');fields=control_fields(data)
                 else:
                     require(rel not in files,'duplicate file');files[rel]=(data,entry.mode)
-    expected={BUNDLE+'/SIMControl',BUNDLE+'/Info.plist',HELPER,PROVENANCE}|{BUNDLE+'/'+x for x in RESOURCE_HASHES}
+    expected={BUNDLE+'/SIMControl',BUNDLE+'/Info.plist',HELPER,PROVENANCE}|set(RESOURCE_PATHS.values())
     require(set(files)==expected,'unexpected/missing payload file')
     require(fields,'control missing');info=module_plist(files[BUNDLE+'/Info.plist'][0])
     require(info['CFBundleDisplayName']=='蜂窝管理','wrong module title')
     require(info.get('CCSModuleSize')=={'Portrait':{'Width':1,'Height':1},'Landscape':{'Width':1,'Height':1}},'CCSupport sizes missing')
     helper=files[HELPER][0];require(sha256(helper)==HELPER_SHA256,'helper changed')
     for p,(data,mode) in files.items():require(mode==(0o755 if p in (HELPER,BUNDLE+'/SIMControl') else 0o644),'wrong file mode: '+p)
-    for n,digest in RESOURCE_HASHES.items():require(sha256(files[BUNDLE+'/'+n][0])==digest,'original icon changed')
+    for n,digest in RESOURCE_HASHES.items():require(sha256(files[RESOURCE_PATHS[n]][0])==digest,'icon resource mismatch: '+n)
     module_report=macho(files[BUNDLE+'/SIMControl'][0],module=True);helper_report=macho(helper)
     report={'package':path.name,'size':len(b),'sha256':sha256(b),'control':fields,'module':module_report,'helper':helper_report,'archive':'ar/gzip/raw USTAR','runtime_tested':False}
     target=ROOT/'dist/package-validation.json';target.parent.mkdir(exist_ok=True);target.write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')

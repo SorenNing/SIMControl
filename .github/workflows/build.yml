@@ -14,7 +14,7 @@ jobs:
         run: bash tools/build-macos.sh
       - uses: actions/upload-artifact@v4
         with:
-          name: SIMControl-1.0
+          name: SIMControl-1.0.1
           path: |
             dist/*.deb
             dist/package-validation.json

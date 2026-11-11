@@ -3,7 +3,7 @@
 from pathlib import Path
 import gzip,io,json,shutil,tarfile
 from mkdeb import pack
-from simcontrol import ROOT,BUNDLE,HELPER,PROVENANCE,DEB,HELPER_SHA256,RESOURCE_HASHES,sha256,require,module_plist,control_fields,macho
+from simcontrol import ROOT,BUNDLE,HELPER,PROVENANCE,DEB,HELPER_SHA256,RESOURCE_HASHES,RESOURCE_PATHS,sha256,require,module_plist,control_fields,macho
 
 def archive(root,out):
     buffer=io.BytesIO()
@@ -33,7 +33,7 @@ def main():
         p=stage/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(data);p.chmod(mode)
     put(BUNDLE+'/SIMControl',module,0o755);put(BUNDLE+'/Info.plist',info)
     for name,digest in RESOURCE_HASHES.items():
-        data=(ROOT/'Resources'/name).read_bytes();require(sha256(data)==digest,'resource changed: '+name);put(BUNDLE+'/'+name,data)
+        data=(ROOT/'Resources'/name).read_bytes();require(sha256(data)==digest,'resource changed: '+name);put(RESOURCE_PATHS[name],data)
     put(HELPER,helper,0o755);put(PROVENANCE,(ROOT/'Vendor/provenance.json').read_bytes())
     control=ROOT/'build/control';control.mkdir(exist_ok=True)
     (control/'control').write_bytes(text)

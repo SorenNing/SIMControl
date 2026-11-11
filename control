@@ -1,11 +1,11 @@
 Package: com.ning.simcontrol
 Name: 蜂窝管理
-Version: 1.0
+Version: 1.0.1
 Architecture: iphoneos-arm64e
-Maintainer: Ning&Netskao
-Author: Ning&Netskao
+Maintainer: Ning
+Author: Ning
 Section: Tweaks
 Priority: optional
 Depends: firmware (>= 16.0), firmware (<< 18.0), com.opa334.ccsupport
 Description: Native SIM switches for the system Control Center on iOS 16 and 17.
-Icon: file:///Library/ControlCenter/Bundles/SIMControl.bundle/SettingsIcon@3x.png
+Icon: file:///usr/share/icons/com.ning.simcontrol.png

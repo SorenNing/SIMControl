@@ -6,7 +6,7 @@ import struct
 
 ROOT = Path(__file__).resolve().parents[1]
 PACKAGE = 'com.ning.simcontrol'
-VERSION = '1.0'
+VERSION = '1.0.1'
 BUNDLE_ID = PACKAGE + '.module'
 BUNDLE = 'Library/ControlCenter/Bundles/SIMControl.bundle'
 HELPER = 'usr/libexec/SIMControl/CCSIMTool'
@@ -15,9 +15,22 @@ HELPER_SHA256 = 'b9ef962cd0e75374c5499f955d57595ca8367b5ecb8d8c0c2d067a0849e218a
 PRIVATE_DYLIB = '/System/Library/PrivateFrameworks/ControlCenterUIKit.framework/ControlCenterUIKit'
 DEB = ROOT / 'dist' / f'{PACKAGE}_{VERSION}_iphoneos-arm64e.deb'
 SOURCES = tuple(f'src/SIMControl{name}.m' for name in ('Module', 'Controller', 'Service', 'Row'))
+# Selected design A: Ning's native green cellular antenna.
 RESOURCE_HASHES = {
-    'CCSIM@3x.png': '097dd959719755c747f1474a790b44358bfb0d88b7eb70b9245573a15066ab53',
-    'SettingsIcon@3x.png': 'fb98b7f82820e6e05fb3063774577b6834bad20df62e6a507b60be9da26af039',
+    'CCSIM.png': 'f7d5e9c9d43b1317c12cc631f48f04e04d57648fd6cfb67bcaae7a1b6f4c7743',
+    'CCSIM@2x.png': 'd300cd5e9d59ea6cd408fb474ebce41142768738e70d22a16a0c88ebdded8d01',
+    'CCSIM@3x.png': 'a447eea7f4a11f424615b4435589d65d1bf0db75901b9aa277bbdba6f3c18e5c',
+    'SettingsIcon.png': '0ee6463d8947d658f909fddef5ddf0d1a9c3c0ebdf4cf8ce3a619471596989f4',
+    'SettingsIcon@2x.png': '22edd296e254a5cc58780d662cd2441c3119e05f0ead506f6193c6ea289ed060',
+    'SettingsIcon@3x.png': 'be4f7146704ba978fa775ea1570af83640d39981c366328c860e42ce2f7c7ed5',
+    'PackageIcon.png': 'c0992b57897fb2add034a68deabae3c870db8547f4fcdda50b0e3f68a2b8bf05',
+    'PackageIcon@256.png': '45e22a4dfb6947df4910cc189d305821105473067705a805bea23108bf9b541a',
+    'PackageIcon@128.png': 'e576771f829acc015e7489ed64713e46410210b1858e177f41f34225408a757d',
+}
+RESOURCE_PATHS = {
+    name: (f'usr/share/icons/{PACKAGE}{name.removeprefix("PackageIcon")}'
+           if name.startswith('PackageIcon') else f'{BUNDLE}/{name}')
+    for name in RESOURCE_HASHES
 }
 
 
@@ -186,9 +199,9 @@ def control_fields(data):
         require(key not in fields and value.strip(), 'duplicate or empty control field')
         fields[key] = value.strip()
     wanted = {'Package': PACKAGE, 'Version': VERSION, 'Architecture': 'iphoneos-arm64e',
-              'Maintainer': 'Ning&Netskao', 'Author': 'Ning&Netskao',
+              'Maintainer': 'Ning', 'Author': 'Ning',
               'Depends': 'firmware (>= 16.0), firmware (<< 18.0), com.opa334.ccsupport',
-              'Icon': f'file:///{BUNDLE}/SettingsIcon@3x.png'}
+              'Icon': f'file:///{RESOURCE_PATHS["PackageIcon.png"]}'}
     for key, value in wanted.items():
         require(fields.get(key) == value, f'incorrect control field: {key}')
     return fields
