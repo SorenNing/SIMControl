@@ -8,7 +8,7 @@ for ARCH in arm64 arm64e; do
   xcrun --sdk iphoneos clang -fobjc-arc -fblocks -O2 -fvisibility=hidden \
     -Werror=implicit-function-declaration -Werror=objc-method-access \
     -isysroot "$SDK" -target "${ARCH}-apple-ios16.0" -dynamiclib -Isrc \
-    -Ftools/linker -framework Foundation -framework UIKit -framework QuartzCore \
+    -Ftools/linker -framework Foundation -framework UIKit -framework CoreGraphics -framework QuartzCore \
     -framework CoreTelephony -Wl,-needed_framework,ControlCenterUIKit \
     -Wl,-fixup_chains -Wl,-install_name,@loader_path/SIMControl \
     "${SOURCES[@]}" -o "build/SIMControl-${ARCH}"
