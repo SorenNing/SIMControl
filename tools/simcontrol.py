@@ -6,20 +6,20 @@ import struct
 
 ROOT = Path(__file__).resolve().parents[1]
 PACKAGE = 'com.ning.simcontrol'
-VERSION = '1.0.1'
+VERSION = '1.0.4'
 BUNDLE_ID = PACKAGE + '.module'
-BUNDLE = 'Library/ControlCenter/Bundles/SIMControl.bundle'
-HELPER = 'usr/libexec/SIMControl/CCSIMTool'
-PROVENANCE = 'usr/libexec/SIMControl/provenance.json'
+BUNDLE = 'var/jb/Library/ControlCenter/Bundles/SIMControl.bundle'
+HELPER = 'var/jb/usr/libexec/SIMControl/CCSIMTool'
+PROVENANCE = 'var/jb/usr/libexec/SIMControl/provenance.json'
 HELPER_SHA256 = 'b9ef962cd0e75374c5499f955d57595ca8367b5ecb8d8c0c2d067a0849e218a9'
 PRIVATE_DYLIB = '/System/Library/PrivateFrameworks/ControlCenterUIKit.framework/ControlCenterUIKit'
-DEB = ROOT / 'dist' / f'{PACKAGE}_{VERSION}_iphoneos-arm64e.deb'
+DEB = ROOT / 'dist' / f'{PACKAGE}_{VERSION}_iphoneos-arm64.deb'
 SOURCES = tuple(f'src/SIMControl{name}.m' for name in ('Module', 'Controller', 'Service', 'Row'))
 # Selected design A: Ning's native green cellular antenna.
 RESOURCE_HASHES = {
-    'CCSIM.png': 'f7d5e9c9d43b1317c12cc631f48f04e04d57648fd6cfb67bcaae7a1b6f4c7743',
-    'CCSIM@2x.png': 'd300cd5e9d59ea6cd408fb474ebce41142768738e70d22a16a0c88ebdded8d01',
-    'CCSIM@3x.png': 'a447eea7f4a11f424615b4435589d65d1bf0db75901b9aa277bbdba6f3c18e5c',
+    'CCSIM.png': '0300280321e90e599628c4f8c3098f1aeac68897d4ae88f2c97508dbb9ae15d0',
+    'CCSIM@2x.png': 'deeb87eefe3717a510020bd1ffcb6242213514913a6fec95327ff22d1744f192',
+    'CCSIM@3x.png': '097dd959719755c747f1474a790b44358bfb0d88b7eb70b9245573a15066ab53',
     'SettingsIcon.png': '0ee6463d8947d658f909fddef5ddf0d1a9c3c0ebdf4cf8ce3a619471596989f4',
     'SettingsIcon@2x.png': '22edd296e254a5cc58780d662cd2441c3119e05f0ead506f6193c6ea289ed060',
     'SettingsIcon@3x.png': 'be4f7146704ba978fa775ea1570af83640d39981c366328c860e42ce2f7c7ed5',
@@ -28,7 +28,7 @@ RESOURCE_HASHES = {
     'PackageIcon@128.png': 'e576771f829acc015e7489ed64713e46410210b1858e177f41f34225408a757d',
 }
 RESOURCE_PATHS = {
-    name: (f'usr/share/icons/{PACKAGE}{name.removeprefix("PackageIcon")}'
+    name: (f'var/jb/usr/share/icons/{PACKAGE}{name.removeprefix("PackageIcon")}'
            if name.startswith('PackageIcon') else f'{BUNDLE}/{name}')
     for name in RESOURCE_HASHES
 }
@@ -198,7 +198,7 @@ def control_fields(data):
         key, value = line.split(':', 1)
         require(key not in fields and value.strip(), 'duplicate or empty control field')
         fields[key] = value.strip()
-    wanted = {'Package': PACKAGE, 'Version': VERSION, 'Architecture': 'iphoneos-arm64e',
+    wanted = {'Package': PACKAGE, 'Version': VERSION, 'Architecture': 'iphoneos-arm64',
               'Maintainer': 'Ning', 'Author': 'Ning',
               'Depends': 'firmware (>= 16.0), firmware (<< 18.0), com.opa334.ccsupport',
               'Icon': f'file:///{RESOURCE_PATHS["PackageIcon.png"]}'}

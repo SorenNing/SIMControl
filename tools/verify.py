@@ -34,7 +34,7 @@ def main():
     expected={BUNDLE+'/SIMControl',BUNDLE+'/Info.plist',HELPER,PROVENANCE}|set(RESOURCE_PATHS.values())
     require(set(files)==expected,'unexpected/missing payload file')
     require(fields,'control missing');info=module_plist(files[BUNDLE+'/Info.plist'][0])
-    require(info['CFBundleDisplayName']=='蜂窝管理','wrong module title')
+    require(info['CFBundleDisplayName']=='SIM卡切换','wrong module title')
     require(info.get('CCSModuleSize')=={'Portrait':{'Width':1,'Height':1},'Landscape':{'Width':1,'Height':1}},'CCSupport sizes missing')
     helper=files[HELPER][0];require(sha256(helper)==HELPER_SHA256,'helper changed')
     for p,(data,mode) in files.items():require(mode==(0o755 if p in (HELPER,BUNDLE+'/SIMControl') else 0o644),'wrong file mode: '+p)

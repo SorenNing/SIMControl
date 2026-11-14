@@ -35,6 +35,7 @@
 - (instancetype)initWithQueue:(dispatch_queue_t)queue;
 - (id)getSubscriptionInfoWithError:(NSError **)error;
 - (id)getSIMStatus:(id)context error:(NSError **)error;
+- (id)copyLabel:(id)context error:(NSError **)error;
 - (id)getLocalizedOperatorName:(id)context error:(NSError **)error;
 - (id)getOperatorName:(id)context error:(NSError **)error;
 - (id)copyMobileSubscriberCountryCode:(id)context error:(NSError **)error;

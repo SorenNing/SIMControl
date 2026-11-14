@@ -29,7 +29,7 @@
     glyph=[glyph imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     [self.compactButton setImage:glyph forState:UIControlStateNormal];
     self.compactButton.tintColor=UIColor.whiteColor;
-    self.compactButton.accessibilityLabel=@"蜂窝管理";
+    self.compactButton.accessibilityLabel=@"SIM卡切换";
     [self.compactButton addTarget:self action:@selector(openPanel) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.compactButton];
     self.panel=[UIView new];
@@ -40,7 +40,7 @@
     self.headerIcon.contentMode=UIViewContentModeScaleAspectFit;
     [self.panel addSubview:self.headerIcon];
     self.heading=[UILabel new];
-    self.heading.text=@"蜂窝管理";
+    self.heading.text=@"SIM卡切换";
     self.heading.textColor=UIColor.whiteColor;
     self.heading.textAlignment=NSTextAlignmentCenter;
     self.heading.font=[UIFont systemFontOfSize:18 weight:UIFontWeightSemibold];

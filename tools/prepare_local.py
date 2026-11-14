@@ -4,7 +4,7 @@ root=Path('/var/minis/workspace/SIMControl')
 base=Path('/var/minis/workspace/ccsim-five3-review/five3')
 # Derive the registration plist from the original, including device-family keys.
 p=plistlib.loads((base/'Info.plist').read_bytes())
-p.update(CFBundleExecutable='SIMControl',CFBundleIdentifier='com.ning.simcontrol.module',CFBundleName='蜂窝管理',CFBundleDisplayName='蜂窝管理',CFBundleShortVersionString='1.0',CFBundleVersion='1',NSPrincipalClass='SIMControlModule',MinimumOSVersion='16.0')
+p.update(CFBundleExecutable='SIMControl',CFBundleIdentifier='com.ning.simcontrol.module',CFBundleName='SIM卡切换',CFBundleDisplayName='SIM卡切换',CFBundleShortVersionString='1.0',CFBundleVersion='1',NSPrincipalClass='SIMControlModule',MinimumOSVersion='16.0')
 p['ModuleSize']={'columns':1,'rows':1}
 p['CCSModuleDefaultSize']={'Width':1,'Height':1}
 p['CCSModuleSize']={'Portrait':{'Width':1,'Height':1},'Landscape':{'Width':1,'Height':1}}

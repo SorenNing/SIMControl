@@ -42,7 +42,7 @@ static NSString *SIMNormalizeCarrier(NSString *value) {
     return text;
 }
 static NSString *SIMHelperPath(void) {
-    // Resolve relative to this module's installed image, including the current RootHide root.
+    // Locate the helper under the same root as the loaded Control Center module.
     Dl_info info={0};
     if (!dladdr((const void *)&SIMHelperPath,&info) || !info.dli_fname) return nil;
     NSString *image=[NSString stringWithUTF8String:info.dli_fname];
@@ -70,31 +70,14 @@ static NSString *SIMHelperPath(void) {
     return self;
 }
 - (NSString *)carrierForContext:(CTXPCServiceSubscriptionContext *)context {
-    NSError *error=nil;
-    NSString *name=nil;
-    // The SIM's home PLMN is stable while roaming; never use the user-editable SIM label.
-    if ([self.client respondsToSelector:@selector(copyMobileSubscriberCountryCode:error:)] &&
-        [self.client respondsToSelector:@selector(copyMobileSubscriberNetworkCode:error:)]) {
-        NSString *mcc=SIMString([self.client copyMobileSubscriberCountryCode:context error:&error]);
-        error=nil;
-        NSString *mnc=SIMString([self.client copyMobileSubscriberNetworkCode:context error:&error]);
-        name=SIMChineseCarrier(mcc,mnc);
+    // Match beta4 CCSIM: the row text is CoreTelephony's user-facing SIM label
+    // (for example, “副号” or “电信”), not the carrier/operator name.
+    if ([self.client respondsToSelector:@selector(copyLabel:error:)]) {
+        NSError *error=nil;
+        NSString *label=SIMString([self.client copyLabel:context error:&error]);
+        if (label.length) return label;
     }
-    NSDictionary<NSString *,CTCarrier *> *providers=self.network.serviceSubscriberCellularProviders;
-    NSUUID *uuid=[context respondsToSelector:@selector(uuid)]?context.uuid:nil;
-    // Match a provider only by this subscription UUID. Dictionary ordering is not a card-slot identity.
-    CTCarrier *carrier=nil;
-    if (uuid) for (NSString *key in providers) {
-        if ([key caseInsensitiveCompare:uuid.UUIDString]==NSOrderedSame) { carrier=providers[key]; break; }
-    }
-    if (!name && carrier) name=SIMNormalizeCarrier(carrier.carrierName) ?: SIMChineseCarrier(carrier.mobileCountryCode,carrier.mobileNetworkCode);
-    if (!name && [self.client respondsToSelector:@selector(getLocalizedOperatorName:error:)]) {
-        error=nil; name=SIMNormalizeCarrier([self.client getLocalizedOperatorName:context error:&error]);
-    }
-    if (!name && [self.client respondsToSelector:@selector(getOperatorName:error:)]) {
-        error=nil; name=SIMNormalizeCarrier([self.client getOperatorName:context error:&error]);
-    }
-    return name;
+    return @"运营商未知";
 }
 - (NSArray<SIMControlItem *> *)readNow {
     if (!self.client || ![self.client respondsToSelector:@selector(getSIMStatus:error:)]) return @[];
